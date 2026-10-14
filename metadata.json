@@ -1,0 +1,6 @@
+{
+  "name": "cikguMinKuiz",
+  "description": "Aplikasi pembina prompt kuiz interaktif Gemini Canvas mesra pendidik untuk JAIPk.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
