@@ -385,31 +385,84 @@ export const QuizForm: React.FC<QuizFormProps> = ({
         </div>
 
         {/* 8. Nota atau Bahan Rujukan */}
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
-            <label
-              htmlFor="notes"
-              className="block text-xs sm:text-sm font-semibold text-slate-800"
-            >
-              8. Nota atau Bahan Rujukan
-            </label>
-            <span className="text-[11px] text-slate-400">
-              {formData.notes.length > 0 ? `${formData.notes.length} aksara` : 'Disyorkan'}
-            </span>
+        <div className="space-y-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <label
+                htmlFor="notes"
+                className="block text-xs sm:text-sm font-semibold text-slate-800"
+              >
+                8. Nota atau Bahan Rujukan
+              </label>
+              <span className="text-[11px] font-medium text-teal-700 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
+                Pilihan
+              </span>
+            </div>
+
+            {/* AI Assistance Buttons for Notes */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <button
+                type="button"
+                onClick={() => {
+                  const subj = formData.subject.trim() || 'subjek ini';
+                  const grade = formData.gradeLevel.trim() || 'tahap ini';
+                  const title = formData.title.trim() || 'tajuk sukatan';
+                  const aiNote = `Arahan fakta silibus untuk Gemini:\nSila gunakan fakta asas sukatan standard DSKP/KSSR/KSSM bagi subjek ${subj} (${grade}) berkaitan topik '${title}'. Pastikan konsep fakta asas, takrifan, dan contoh yang dibina menepati buku teks rasmi.`;
+                  updateField('notes', aiNote);
+                }}
+                className="text-[11px] font-semibold text-teal-800 bg-teal-50 hover:bg-teal-100 border border-teal-300 px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 cursor-pointer"
+                title="Minta Gemini gunakan silibus fakta rasmi DSKP secara automatik"
+              >
+                <Sparkles className="w-3 h-3 text-amber-500" />
+                <span>Biar AI Rangka Nota Silibus</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const template = `1. Konsep & Takrifan Utama:\n- \n\n2. Fakta & Ciri Penting:\n- \n\n3. Contoh Amalan / Situasi Harian:\n- \n\n4. Pengajaran & Nilai Murni:\n- `;
+                  updateField('notes', template);
+                }}
+                className="text-[11px] font-medium text-slate-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 px-2 py-1 rounded-md transition-colors cursor-pointer"
+                title="Muat templat struktur nota ringkas"
+              >
+                <span>Templat Rangka</span>
+              </button>
+
+              {formData.notes.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => updateField('notes', '')}
+                  className="text-[11px] text-slate-400 hover:text-rose-600 px-1.5 py-1 transition-colors cursor-pointer"
+                  title="Padam nota"
+                >
+                  Padam
+                </button>
+              )}
+            </div>
           </div>
+
           <textarea
             id="notes"
             rows={5}
             value={formData.notes}
             onChange={(e) => updateField('notes', e.target.value)}
-            placeholder="Tampal isi kandungan buku teks, nota ringkas, atau senarai fakta di sini. Gemini akan diarahkan menjadikan nota ini sebagai rujukan utama soalan..."
+            placeholder="Tampal isi kandungan buku teks, nota ringkas, atau klik butang 'Biar AI Rangka Nota Silibus' di atas jika anda tiada nota di tangan. Gemini akan menjana soalan berpandukan sukatan..."
             className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-teal-600 focus:ring-2 focus:ring-teal-100 text-slate-900 transition-colors resize-y leading-relaxed"
           />
-          <div className="flex items-start gap-1.5 text-[11px] text-slate-500 mt-1">
-            <CheckCircle2 className="w-3.5 h-3.5 text-teal-600 shrink-0 mt-0.5" />
-            <span>
-              Peringatan integriti ilmu: Jangan reka petikan al-Quran, hadis atau hukum agama. Jika ada nota khusus, tampal di atas.
-            </span>
+
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-[11px] text-slate-500">
+            <div className="flex items-start gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-teal-600 shrink-0 mt-0.5" />
+              <span>
+                <strong>Boleh biarkan kosong</strong> — Jika tiada nota, Gemini akan dirangka untuk menggunakan fakta asas silibus standard.
+              </span>
+            </div>
+            {formData.notes.length > 0 && (
+              <span className="text-slate-400 shrink-0 tabular-nums">
+                {formData.notes.length} aksara
+              </span>
+            )}
           </div>
         </div>
 
